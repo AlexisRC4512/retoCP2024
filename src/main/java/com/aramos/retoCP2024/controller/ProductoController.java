@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/productos")
+@RequestMapping("/api/v1/productos")
 @RequiredArgsConstructor
 public class ProductoController {
 
