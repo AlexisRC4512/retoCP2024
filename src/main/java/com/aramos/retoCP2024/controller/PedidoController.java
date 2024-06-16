@@ -5,6 +5,7 @@ import com.aramos.retoCP2024.dto.response.BaseResponse;
 import com.aramos.retoCP2024.dto.response.PedidoResponseDTO;
 import com.aramos.retoCP2024.service.PedidoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("v1/pedidos")
 @RequiredArgsConstructor
+@Slf4j
 public class PedidoController {
 
     private final PedidoService pedidoService;

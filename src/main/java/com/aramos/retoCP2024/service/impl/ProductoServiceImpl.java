@@ -10,6 +10,7 @@ import com.aramos.retoCP2024.repository.ProductoRepository;
 import com.aramos.retoCP2024.service.ProductoService;
 import com.aramos.retoCP2024.util.ProductoProjection;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ProductoServiceImpl implements ProductoService {
     private final ProductoRepository productoRepository;
@@ -32,6 +34,7 @@ public class ProductoServiceImpl implements ProductoService {
             Producto productoCreado = productoRepository.save(producto);
             return new BaseResponse(Constant.CODE_SUCCESS, Constant.MESS_SUCCESS_PRODUCTO_CREACION, Optional.of(productoCreado));
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR_DATABASE, Constant.MESS_ERROR_DATABASE, Optional.empty());
         }
     }
@@ -43,6 +46,7 @@ public class ProductoServiceImpl implements ProductoService {
             Page<Producto> productos = productoRepository.findAll(pageable);
             return productos.map(this::convertirProductoEntityaDTO);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new CustomInternalException(Constant.MESS_ERROR_DATABASE, e);
         }
     }
@@ -53,6 +57,7 @@ public class ProductoServiceImpl implements ProductoService {
             Pageable pageable = PageRequest.of(pagina, cantidadElementos);
             return productoRepository.findByPrecioBetween(precioMinimo, precioMaximo, pageable);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new CustomInternalException(Constant.MESS_ERROR_DATABASE, e);
         }
     }
@@ -64,6 +69,7 @@ public class ProductoServiceImpl implements ProductoService {
             Page<ProductoProjection> productos = productoRepository.findByNombreContaining(nombre, pageable);
             return productos;
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new CustomInternalException(Constant.MESS_ERROR_DATABASE, e);
         }
     }
@@ -75,8 +81,10 @@ public class ProductoServiceImpl implements ProductoService {
                     .orElseThrow(() -> new EntityNotFoundException(Constant.MESS_FAILED_FIND_PRODUCTO));
             return new BaseResponse(Constant.CODE_SUCCESS,Constant.MESS_SUCCESS_FIND_PRODUCTO,Optional.of(producto));
         } catch (EntityNotFoundException e) {
+            log.error(e.getMessage());
             throw new CustomInternalException(Constant.MESS_FAILED_FIND_PRODUCTO, e);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new CustomInternalException(Constant.MESS_ERROR_DATABASE, e);
         }
     }
@@ -87,6 +95,7 @@ public class ProductoServiceImpl implements ProductoService {
          productoRepository.deleteById(codigoProducto);
             return new BaseResponse(Constant.CODE_SUCCESS, Constant.MESS_SUCCESS_DELETE_PRODUCTO, Optional.empty());
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR_DATABASE, Constant.MESS_ERROR_DATABASE, Optional.empty());
         }
     }
@@ -103,8 +112,10 @@ public class ProductoServiceImpl implements ProductoService {
             ProductoResponseDTO productoResponseDTO = convertirProductoEntityaDTO(productoActualizado);
             return new BaseResponse(Constant.CODE_SUCCESS, Constant.MESS_SUCCESS_UPDATE_PRODUCTO, Optional.of(productoResponseDTO));
         } catch (EntityNotFoundException e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR, e.getMessage(), Optional.empty());
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR_DATABASE, Constant.MESS_ERROR_DATABASE, Optional.empty());
         }
     }
