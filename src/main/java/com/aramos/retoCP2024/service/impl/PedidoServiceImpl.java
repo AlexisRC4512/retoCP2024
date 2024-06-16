@@ -12,6 +12,7 @@ import com.aramos.retoCP2024.repository.PedidoRepository;
 import com.aramos.retoCP2024.repository.ProductoRepository;
 import com.aramos.retoCP2024.service.PedidoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
+
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
     private final PedidoRepository pedidoRepository;
@@ -32,8 +35,10 @@ public class PedidoServiceImpl implements PedidoService {
            Pedido objPedido = pedidoRepository.save(convertirPedidoDtoaEntity(pedidoRequestDTO));
            return new BaseResponse(Constant.CODE_SUCCESS,Constant.MESS_SUCCESS_PEDIDO,Optional.of(objPedido));
        } catch (EntityNotFoundException e) {
+           log.error(e.getMessage());
            return new BaseResponse(Constant.CODE_ERROR, e.getMessage(), Optional.empty());
        } catch (Exception e) {
+           log.error(e.getMessage());
            return new BaseResponse(Constant.CODE_ERROR_DATABASE, Constant.MESS_ERROR_DATABASE, Optional.empty());
        }
     }
@@ -45,8 +50,10 @@ public class PedidoServiceImpl implements PedidoService {
             Page<Pedido> pedidos = pedidoRepository.findAll(pageable);
             return pedidos.map(this::convertirPedidoEntityaDTO);
         } catch (DataAccessException e) {
+            log.error(e.getMessage());
             throw new CustomDatabaseException(Constant.MESS_ERROR_DATABASE_ACCESS, e);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new CustomInternalException(Constant.MESS_ERROR_DATABASE, e);
         }
     }
@@ -58,8 +65,10 @@ public class PedidoServiceImpl implements PedidoService {
             Page<Pedido> pedidos = pedidoRepository.findByClienteApellidos(apellidos, pageable);
             return pedidos.map(this::convertirPedidoEntityaDTO);
         } catch (DataAccessException e) {
+            log.error(e.getMessage());
             throw new CustomDatabaseException(Constant.MESS_ERROR_DATABASE_ACCESS, e);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new CustomInternalException(Constant.MESS_ERROR_DATABASE, e);
         }
     }
@@ -72,8 +81,10 @@ public class PedidoServiceImpl implements PedidoService {
             PedidoResponseDTO pedidoResponseDTO = convertirPedidoEntityaDTO(pedido);
             return new BaseResponse(Constant.CODE_SUCCESS, Constant.MESS_SUCCESS_FIND_PEDIDO, Optional.of(pedidoResponseDTO));
         } catch (EntityNotFoundException e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR, e.getMessage(), Optional.empty());
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR_DATABASE, Constant.MESS_ERROR_DATABASE, Optional.empty());
         }
     }
@@ -92,8 +103,10 @@ public class PedidoServiceImpl implements PedidoService {
             PedidoResponseDTO pedidoResponseDTO = convertirPedidoEntityaDTO(pedidoActualizado);
             return new BaseResponse(Constant.CODE_SUCCESS, Constant.MESS_SUCCESS_UPDATE_PEDIDO, Optional.of(pedidoResponseDTO));
         } catch (EntityNotFoundException e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR, e.getMessage(), Optional.empty());
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR_DATABASE, Constant.MESS_ERROR_DATABASE, Optional.empty());
         }
     }
@@ -107,8 +120,10 @@ public class PedidoServiceImpl implements PedidoService {
             pedidoRepository.delete(pedido);
             return new BaseResponse(Constant.CODE_SUCCESS, Constant.MESS_SUCCESS_DELETE_PEDIDO, Optional.empty());
         } catch (EntityNotFoundException e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR, e.getMessage(), Optional.empty());
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new BaseResponse(Constant.CODE_ERROR_DATABASE, Constant.MESS_ERROR_DATABASE, Optional.empty());
         }
     }
