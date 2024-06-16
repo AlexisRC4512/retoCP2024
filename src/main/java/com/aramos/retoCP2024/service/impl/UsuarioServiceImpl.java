@@ -23,7 +23,6 @@ public class UsuarioServiceImpl implements UsuarioService {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 Optional<Usuario> usuario=usuarioRepository.findByCorreo(username);
-                System.out.println(usuario.get().getUsername());
                 return usuarioRepository.findByCorreo(username).orElseThrow( ()->
                         new UsernameNotFoundException("Usuario no encontrado"));
             }
