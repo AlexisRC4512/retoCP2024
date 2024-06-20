@@ -1,3 +1,4 @@
+imagen Docker:docker pull alexis4512/retocp2024:1.0
 El proyecto tiene autenticación por jwt para poder usar los endpoints se necesita primero crear usuario y luego iniciar sesión  (al iniciar sesión  les devuelve un jwt)y en cada endpoint en autorización usar la opción de bearer Token.
 Crear Pedido
 Método: POST
